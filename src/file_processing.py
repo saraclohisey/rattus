@@ -6,7 +6,7 @@ from api import EnsemblAPI
 
 def validate_input_file(input_file_path):
     """
-    Validates the input CSV file to ensure it contains the required 'Pig Gene' column,
+    Validates the input CSV file to ensure it contains the required 'Rat Gene' column,
     is not empty, and follows the correct format.
 
     Parameters:
@@ -21,27 +21,27 @@ def validate_input_file(input_file_path):
             headers = next(reader, None)  
             if not headers:
                 raise ValueError("The input CSV file is empty.")
-            if 'Pig Gene' not in headers:
-                raise ValueError("The input CSV file must contain a column named 'Pig Gene'.")
+            if 'Rat Gene' not in headers:
+                raise ValueError("The input CSV file must contain a column named 'Rat Gene'.")
     except csv.Error as e:
         raise ValueError(f"CSV format error: {e}")
 
 def process_csv(input_file_path, output_file_path, api):
     """
-    Processes a CSV file containing Pig Genes to find their human orthologs and writes the results to another CSV file.
+    Processes a CSV file containing Rat Genes to find their human orthologs and writes the results to another CSV file.
     
     Parameters:
-    - input_file_path (str): The file path for the input CSV file containing Pig Gene symbols.
+    - input_file_path (str): The file path for the input CSV file containing Rat Gene symbols.
     - output_file_path (str): The file path for the output CSV file where results will be saved.
     - api (EnsemblAPI): An instance of the EnsemblAPI class used to query the Ensembl database.
 
     Returns:
     - tuple: A tuple containing two integers:
-        1. The count of Pig Genes for which no human orthologs were found.
-        2. The count of Pig Genes for which errors occurred during processing.
+        1. The count of Rat Genes for which no human orthologs were found.
+        2. The count of Rat Genes for which errors occurred during processing.
 
-    The input CSV file must contain a column named 'Pig Gene'. The output CSV file will contain columns for
-    'Pig Gene', 'Human Ortholog Gene Symbol', 'Type', 'Identity (%)', and 'Positivity (%)'.
+    The input CSV file must contain a column named 'Rat Gene'. The output CSV file will contain columns for
+    'Rat Gene', 'Human Ortholog Gene Symbol', 'Type', 'Identity (%)', and 'Positivity (%)'.
 
     The function uss a ThreadPoolExecutor to process gene queries in parallel, improving performance for
     large datasets. 
@@ -55,22 +55,22 @@ def process_csv(input_file_path, output_file_path, api):
          open(output_file_path, mode='w', newline='', encoding='utf-8') as outfile:
         gene_reader = csv.DictReader(csvfile)
         
-        if 'Pig Gene' not in gene_reader.fieldnames:
-            logging.error("The input CSV file must contain a column named 'Pig Gene'.")
+        if 'Rat Gene' not in gene_reader.fieldnames:
+            logging.error("The input CSV file must contain a column named 'Rat Gene'.")
             sys.exit(1)
         
-        fieldnames = ['Pig Gene', 'Human Ortholog Gene Symbol', 'Type', 'Identity (%)', 'Positivity (%)']
+        fieldnames = ['Rat Gene', 'Human Ortholog Gene Symbol', 'Type', 'Identity (%)', 'Positivity (%)']
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
 
-        pig_genes = [row['Pig Gene'] for row in gene_reader]
+        Rat_genes = [row['Rat Gene'] for row in gene_reader]
 
-        def process_gene(pig_gene):
-            human_orthologs, error = api.get_human_ortholog(pig_gene)
+        def process_gene(Rat_gene):
+            human_orthologs, error = api.get_human_ortholog(Rat_gene)
             results = []
             for ortholog in human_orthologs:
                 results.append({
-                    'Pig Gene': ortholog['pig_gene'], 
+                    'Rat Gene': ortholog['Rat_gene'], 
                     'Human Ortholog Gene Symbol': ortholog['gene_symbol'], 
                     'Type': ortholog['type'], 
                     'Identity (%)': ortholog['identity'], 
@@ -85,8 +85,8 @@ def process_csv(input_file_path, output_file_path, api):
             return results
 
         # Use ThreadPoolExecutor to process genes in parallel
-        with ThreadPoolExecutor(max_workers=10) as executor, tqdm(total=len(pig_genes)) as progress:
-            future_to_gene = {executor.submit(process_gene, gene): gene for gene in pig_genes}
+        with ThreadPoolExecutor(max_workers=10) as executor, tqdm(total=len(Rat_genes)) as progress:
+            future_to_gene = {executor.submit(process_gene, gene): gene for gene in Rat_genes}
             for future in as_completed(future_to_gene):
                 gene = future_to_gene[future]
                 try:

@@ -30,7 +30,7 @@ class EnsemblAPI:
         - RequestException: For issues like network problems, or timeout errors.
         - Exception: For any unexpected errors encountered during the request process.
         """
-        ext = f"/homology/symbol/Rattus_norvegicus/{rat_gene}?content-type=application/json"
+        ext = f"/homology/symbol/rattus_norvegicus/{rat_gene}?content-type=application/json"
         for attempt in range(retries):
             try:
                 response = self.session.get(self.server + ext)

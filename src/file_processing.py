@@ -67,10 +67,11 @@ def process_csv(input_file_path, output_file_path, api):
 
         def process_gene(Rat_gene):
             human_orthologs, error = api.get_human_ortholog(Rat_gene)
+            print (human_orthologs)
             results = []
             for ortholog in human_orthologs:
                 results.append({
-                    'Rat Gene': ortholog['Rat_gene'], 
+                    'Rat Gene': ortholog['rat_gene'], 
                     'Human Ortholog Gene Symbol': ortholog['gene_symbol'], 
                     'Type': ortholog['type'], 
                     'Identity (%)': ortholog['identity'], 
@@ -88,7 +89,11 @@ def process_csv(input_file_path, output_file_path, api):
         with ThreadPoolExecutor(max_workers=10) as executor, tqdm(total=len(Rat_genes)) as progress:
             future_to_gene = {executor.submit(process_gene, gene): gene for gene in Rat_genes}
             for future in as_completed(future_to_gene):
-                gene = future_to_gene[future]
+                #gene = future_to_gene[future]
+                #results = future.result()
+                #for result in results:
+                #    writer.writerow(result)
+                #progress.update(1)
                 try:
                     results = future.result()
                     for result in results:

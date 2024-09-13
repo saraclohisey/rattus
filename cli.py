@@ -9,8 +9,8 @@ from file_processing import process_csv
 def main():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-    parser = argparse.ArgumentParser(description='Find human orthologs for pig genes from a CSV file or a single Ensembl identifier and output the results to another CSV file.')
-    parser.add_argument('input_file_path', type=str, help='Path to the input CSV file containing pig gene symbols.', nargs='?')
+    parser = argparse.ArgumentParser(description='Find human orthologs for rat genes from a CSV file or a single Ensembl identifier and output the results to another CSV file.')
+    parser.add_argument('input_file_path', type=str, help='Path to the input CSV file containing rat gene symbols.', nargs='?')
     parser.add_argument('output_file_path', type=str, help='Path to the output CSV file to save the results.', nargs='?')
     parser.add_argument('--overwrite', action='store_true', help='Overwrite the output file if it exists.')
     parser.add_argument('--ensembl_id', type=str, help='A single Ensembl identifier to process.', default=None)
@@ -24,7 +24,7 @@ def main():
         human_orthologs, error = api.get_human_ortholog(args.ensembl_id)
         if not error:
             for ortholog in human_orthologs:
-                print(f"Pig Gene: {ortholog['pig_gene']}, Human Ortholog Gene Symbol: {ortholog['gene_symbol']}, Type: {ortholog['type']}, Identity (%): {ortholog['identity']}, Positivity (%): {ortholog['positivity']}")
+                print(f"Rat Gene: {ortholog['Rat_gene']}, Human Ortholog Gene Symbol: {ortholog['gene_symbol']}, Type: {ortholog['type']}, Identity (%): {ortholog['identity']}, Positivity (%): {ortholog['positivity']}")
         else:
             logging.error("Error processing the Ensembl identifier.")
     else:

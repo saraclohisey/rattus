@@ -1,6 +1,6 @@
-# Murine-Human ortholog command line interface 
+# Rat-Human ortholog command line interface 
 
-This repository contains a command line interface designed to map murine genes to their human orthologs.
+This repository contains a command line interface designed to map rat genes to their human orthologs.
 
 The program is written in python and uses the Ensembl API.
 
@@ -35,7 +35,7 @@ Clone this repository to your local machine.
 
     --ensembl_id  option to provide a single murine ensembl identifier to the cli 
 
-The input csv must have a single column headed `Mouse Gene`. Only Ensembl identifiers are valid (e.g., ENSMUSG00000111497).
+The input csv must have a single column headed `Rat Gene`. Only Ensembl identifiers are valid (e.g., ENSMUSG00000111497).
 
 ## Output
 
